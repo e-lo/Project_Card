@@ -1,0 +1,154 @@
+{
+  "default": {},
+  "description": "The root schema comprises the entire JSON document.",
+  "definitions": {
+    "project": {
+      "type": "string",
+      "description": "Name of the project. Must be unique within the scenario.",
+      "default": "FILL IN PROJECT",
+      "examples": [
+        "6th St E Road Diet"
+      ]
+    },
+    "category": {
+        "$id": "#/properties/category",
+        "type": "string",
+        "description": "Project category. Used to direct how the project card is processed.",
+        "default": "Please select a project card category",
+        "enum": ["Roadway Property Change"],
+        "examples": [
+            "Roadway Property Change"
+        ]
+    },
+    "tags": {
+      "$id": "#/properties/tags",
+      "type": "array",
+      "description": "A tag used to easily query projects associated with a certain plan or larger project.",
+      "default": [],
+      "examples": [
+          [
+              "2040 Baseline"
+          ]
+      ]
+    },
+    "project_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Prerequisites, corequisites and conflicts.",
+      "properties": {
+        "prerequisites": { "$ref": "#/definitions/project_list" },
+        "corequisites": { "$ref": "#/definitions/project_list" },
+        "conflicts": { "$ref": "#/definitions/project_list" }
+      },
+      "additionalProperties": false
+    },
+    "link_query": {
+      "type": "array",
+      "description": "Link query.",
+      "items": [
+          {
+            "name":"link_property",
+            "type": "object",
+            "description": "Properties to query the roadway facilities by.",
+            "properties": {
+              "model_link_id": {"type": "array"},
+              "osm_link_id": {"type": "array"},
+              "shstReferenceId": {"type": "array"},
+              "name": {"type": "array"}
+            },
+            "oneOf": [
+              {"required": [ "model_link_id"]},
+              {"required": [ "shstReferenceId"]},
+              {"required": [ "osm_link_id"]},
+              {"required": [ "name"]}
+            ],
+            "additionalItems": true
+          }
+      ]
+    },
+    "node_query": {
+      "type": "array",
+      "description": "A unique ID for a facility query.",
+      "items": [
+          {
+            "type": "object",
+            "description": "Properties to query a node on.",
+            "properties": {
+              "osm_node_id": {"type": "string"},
+              "model_node_id": {},
+              "shstReferenceId": {"type": "string"}
+            },
+            "oneOf":[
+              {"required": ["osm_node_id"]},
+              {"required": ["model_node_id"]},
+              {"required": ["shstReferenceId"]}
+            ],
+            "additionalItems": false
+          }
+      ]
+    },
+    "roadway_facility":{
+      "type": "object",
+      "description": "A query to identify roadway facilities.",
+      "properties": {
+        "link": { "$ref": "#/definitions/link_query" },
+        "A": { "$ref": "#/definitions/node_query" },
+        "B": { "$ref": "#/definitions/node_query" }
+      },
+      "required": [
+        "link"
+      ]
+    },
+    "transit_facility":{
+      "type": "object",
+      "desciption": "A query to identify transit facilities."
+    },
+    "facility": {
+      "oneOf": [
+        { "$ref": "#/definitions/roadway_facility" },
+        { "$ref": "#/definitions/transit_facility" }
+      ]
+    },
+    "properties": {
+      "type": "array",
+      "description": "A list of properties to change and how to change them.",
+      "items": [
+        {
+          "type": "object",
+          "description": "Array of directives for changing properties.",
+          "properties": {
+            "property": {"type": "string"},
+            "existing": {},
+            "change": {},
+            "set": {}
+          },
+          "oneOf": [
+            {"required": [ "property","set"]},
+            {"required": [ "property","existing","change"]}
+          ],
+          "additionalItems": true
+        }
+      ]
+    }
+  },
+  "required": [
+      "project",
+      "category",
+      "facility",
+      "properties"
+  ],
+  "title": "The root schema",
+  "properties": {
+      "project": { "$ref": "#/definitions/project" },
+      "category": { "$ref": "#/definitions/category" },
+      "tags":  { "$ref": "#/definitions/tags" },
+      "dependencies": { "$ref": "#/definitions/dependencies" },
+      "facility": {"$ref": "#/definitions/facility" },
+      "properties": {"$ref": "#/definitions/properties" }
+}
+}
