@@ -1,3 +1,4 @@
+myst_nb 
 pylint
 pytest
 sphinx
