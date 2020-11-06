@@ -1,6 +1,6 @@
 {
   "default": {},
-  "description": "The root schema comprises the entire JSON document.",
+  "description": "Project Card data schema defines a change to the transportaton network. In most cases is comprised of three main components: 1. the metadata 2. identificaiton of the part of the network that is to be changed, and 3. the values that should be changed. ",
   "definitions": {
     "project": {
       "type": "string",
@@ -15,9 +15,12 @@
         "type": "string",
         "description": "Project category. Used to direct how the project card is processed.",
         "default": "Please select a project card category",
-        "enum": ["Roadway Property Change"],
-        "examples": [
-            "Roadway Property Change"
+        "enum": [
+          "Roadway Property Change",
+          "Parallel Managed Lanes",
+          "Add New Roadway",
+          "Roadway Deletion",
+          "Transit Service Property Change"
         ]
     },
     "tags": {
@@ -142,7 +145,7 @@
       "facility",
       "properties"
   ],
-  "title": "The root schema",
+  "title": "Project Card",
   "properties": {
       "project": { "$ref": "#/definitions/project" },
       "category": { "$ref": "#/definitions/category" },
