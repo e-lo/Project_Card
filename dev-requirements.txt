@@ -2,5 +2,6 @@ pylint
 pytest
 sphinx
 sphinx-autodoc-typehints
+sphinx-jsonschema
 sphinx_book_theme
 black

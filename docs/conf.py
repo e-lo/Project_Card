@@ -33,6 +33,7 @@ release = "0.0.0"
 extensions = [
     "myst_nb",
     "sphinx.ext.autodoc",
+    "sphinx-jsonschema",
     "sphinx.ext.inheritance_diagram",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
